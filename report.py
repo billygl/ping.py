@@ -31,8 +31,8 @@ df['datetime'] = df['datetime'].map(lambda x: datetime.strptime(str(x), '%Y-%m-%
 df['datetime'] = df['datetime'].dt.floor('Min')
 ts = df.set_index('datetime')
 ts.index = pd.to_datetime(ts.index, unit='s')
-ts = ts.resample('300S')
-ts = ts.interpolate(method='cubic')
+#ts = ts.resample('300S')
+#ts = ts.interpolate(method='time')
 
 plt.plot(ts.index, ts['latency'],'-',label='latency')
 plt.plot(ts.index, ts['jitter'],'-',label='jitter')
