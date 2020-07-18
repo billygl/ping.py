@@ -1,6 +1,15 @@
 # FORK
 - Ported to python 3.x
 
+## INSTALLATION
+- use conda or anaconda for python
+- it uses: pandas, matplotlib and related to monitor and report
+
+## USAGE
+- execute monitor.py every 15 minutes
+- execute report.bat to report stats
+- ![figure 1](/assets/fig_1.png)
+
 # ping.py
 Network ping with delay, jitter and MOS
 
