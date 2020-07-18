@@ -107,13 +107,13 @@ def checksum(source_string):
     countTo = (len(source_string)/2)*2
     count = 0
     while count<countTo:
-        thisVal = ord(source_string[count + 1])*256 + ord(source_string[count])
+        thisVal = (source_string[count + 1])*256 + (source_string[count])
         sum = sum + thisVal
         sum = sum & 0xffffffff # Necessary?
         count = count + 2
 
     if countTo<len(source_string):
-        sum = sum + ord(source_string[len(source_string) - 1])
+        sum = sum + (source_string[len(source_string) - 1])
         sum = sum & 0xffffffff # Necessary?
 
     sum = (sum >> 16)  +  (sum & 0xffff)
@@ -160,25 +160,26 @@ def send_one_ping(my_socket, dest_addr, ID):
     Send one ping to the given >dest_addr<.
     """
     dest_addr  =  socket.gethostbyname(dest_addr)
-
     # Header is type (8), code (8), checksum (16), id (16), sequence (16)
     my_checksum = 0
-
+    
     # Make a dummy heder with a 0 checksum.
     header = struct.pack("bbHHh", ICMP_ECHO_REQUEST, 0, my_checksum, ID, 1)
     bytesInDouble = struct.calcsize("d")
+    
     data = (192 - bytesInDouble) * "Q"
-    data = struct.pack("d", time.time()) + data
-
+    data = struct.pack("d", time.time()) + data.encode("utf-8")
+    
     # Calculate the checksum on the data and the dummy header.
     my_checksum = checksum(header + data)
-
     # Now that we have the right checksum, we put that in. It's just easier
     # to make up a new header than to stuff it into the dummy.
+
     header = struct.pack(
         "bbHHh", ICMP_ECHO_REQUEST, 0, socket.htons(my_checksum), ID, 1
     )
-    packet = header + data
+    packet = header + data    
+    
     my_socket.sendto(packet, (dest_addr, 1)) # Don't know about the 1
 
 
@@ -189,7 +190,9 @@ def do_one(src_addr, dest_addr, timeout):
     icmp = socket.getprotobyname("icmp")
     try:
         my_socket = socket.socket(socket.AF_INET, socket.SOCK_RAW, icmp)
-    except socket.error, (errno, msg):
+    except error:
+        errno = error.errno
+        msg = error.msg
         if errno == 1:
             # Operation not permitted
             msg = msg + (
@@ -200,9 +203,9 @@ def do_one(src_addr, dest_addr, timeout):
         raise # raise the original error
 
     my_ID = os.getpid() & 0xFFFF
-
+    
     my_socket.bind((src_addr,0))
-
+    
     send_one_ping(my_socket, dest_addr, my_ID)
     delay = receive_one_ping(my_socket, my_ID, timeout)
 
@@ -216,18 +219,18 @@ def verbose_ping(src_addr, dest_addr, timeout = 2, count = 4):
     the result.
     """
     for i in xrange(count):
-        print "ping %s..." % dest_addr,
+        print("ping %s...", dest_addr)
         try:
             delay  =  do_one(src_addr, dest_addr, timeout)
-        except socket.gaierror, e:
-            print "failed. (socket error: '%s')" % e[1]
+        except socket.gaierror as e:
+            print("failed. (socket error: '%s')", e[1])
             break
 
         if delay  ==  None:
-            print "failed. (timeout within %ssec.)" % timeout
+            print("failed. (timeout within %ssec.)", timeout)
         else:
             delay  =  delay * 1000
-            print "get ping in %0.4fms" % delay
+            print("get ping in %0.4fms", delay)
 
 #from lib import rrd
 
@@ -252,11 +255,11 @@ if __name__ == '__main__':
     try:
         opts, args = getopt.getopt(sys.argv[1:], ':hc:t:a:b:s:d:o:f:')
     except getopt.GetoptError as err:
-        print help_line % sys.argv[0]
+        print(help_line, sys.argv[0])
         sys.exit(1)
     for opt, arg in opts:
         if opt in '-h':
-            print help_line % sys.argv[0]
+            print(help_line, sys.argv[0])
             sys.exit(1)
         if opt in '-c':
             count = int(arg)
@@ -280,10 +283,10 @@ if __name__ == '__main__':
             rrd_file = arg
 
     if count <= 0:
-        print "ERROR: count must be greater than zero."
+        print("ERROR: count must be greater than zero.")
         sys.exit(1)
     if timeout <= 0:
-        print "ERROR: timeout must be greater than zero."
+        print("ERROR: timeout must be greater than zero.")
         sys.exit(1)
 
     for i in range(0, count):
@@ -385,6 +388,6 @@ if __name__ == '__main__':
 #        rrd_values = [lost_perc, tot_jitter, max_latency, mos]
 #        rrd.update_rrd(rrd_file, rrd_values)
     else:
-        print 'ERROR: output not definied.'
+        print('ERROR: output not definied.')
         sys.exit(1)
 

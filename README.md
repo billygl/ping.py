@@ -1,3 +1,6 @@
+# FORK
+- Ported to python 3.x
+
 # ping.py
 Network ping with delay, jitter and MOS
 

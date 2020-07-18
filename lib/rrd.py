@@ -29,7 +29,7 @@ def create_rrd(rrd_file, step, rrd_counters):
     argv.append('RRA:MIN:0.5:360:5840')
     rc = rrdtool.create(argv)
     if rc:
-        print rrdtool.error()
+        print(rrdtool.error())
         return False
     else:
         return True
@@ -44,7 +44,7 @@ def update_rrd(rrd_file, rrd_values):
         arg = arg + ':%s' %(c)
     rc = rrdtool.update(rrd_file, arg)
     if rc:
-        print rrdtool.error()
+        print(rrdtool.error())
         return False
     else:
         return True
