@@ -10,6 +10,14 @@
 - execute report.bat to report stats
 - ![figure 1](/assets/fig_1.png)
 
+## CHANGELOG
+- v1.0
+  - monitor
+  - report:
+    - remove outliers (quantile 0.15 - 0.85)
+    - smooth lines
+    - average latency and jitter
+
 # ping.py
 Network ping with delay, jitter and MOS
 
