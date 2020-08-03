@@ -26,6 +26,11 @@
 - register converters
   - https://stackoverflow.com/questions/61443261/what-is-the-use-of-pd-plotting-register-matplotlib-converters-in-pandas
   - https://dev.pandas.io/docs/reference/api/pandas.plotting.register_matplotlib_converters.html#pandas.plotting.register_matplotlib_converters
+
+# python without window
+- https://stackoverflow.com/questions/1689015/run-python-script-without-windows-console-appearing/1689269#1689269
+- https://stackoverflow.com/questions/38612509/how-to-run-a-python-script-without-windows-console-appearing
+- check run when user is logged in or not
   
 # others
 - https://stackoverflow.com/questions/4760215/running-shell-command-and-capturing-the-output
